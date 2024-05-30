@@ -76,7 +76,8 @@ class TiebaproDownloaderMiddleware:
 
     def process_request(self, request, spider):
         # UA伪装
-        request.header["User-Agent"]=UserAgent.random
+        # request.header["User-Agent"]=UserAgent().random
+        request.header["User-Agent"]="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 
         return None
 
