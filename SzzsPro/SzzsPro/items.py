@@ -9,9 +9,9 @@ import scrapy
 class SzzsproItem(scrapy.Item):
     # define the fields for your item here like:
     title = scrapy.Field()
-    user = scrapy.Field()
-    time = scrapy.Field()
-    read = scrapy.Field()
+    username = scrapy.Field()
+    posttime = scrapy.Field()
+    readcount = scrapy.Field()
     reply = scrapy.Field()
 
     # pass

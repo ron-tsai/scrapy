@@ -7,6 +7,8 @@
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
 import pymysql
+import pandas as pd
+import os
 
 
 # class SzzsproPipeline(object):
@@ -22,12 +24,12 @@ import pymysql
 #     # 该方法每接收一个item就会被调用一次
 #     def process_item(self, item, spider):
 #         title = item["title"]
-#         user = item["user"]
-#         time = item["time"]
-#         read = item["read"]
+#         username = item["username"]
+#         posttime = item["posttime"]
+#         readcount = item["readcount"]
 #         reply = item["reply"]
-#         # self.fp.write(title + ':' + user + ':' + time + ':' + read + '+' + reply + '\n') #因为字符串和数字型无法放在一起所以报错
-#         self.fp.write(title + ':' + user + ':' + time + '\n')
+#         # self.fp.write(title + ':' + username + ':' + posttime + ':' + readcount + ':' + reply + '\n') #因为字符串和数字型无法放在一起所以报错
+#         self.fp.write(title + ':' + username + '\n')
 #
 #         return item
 #
@@ -35,22 +37,29 @@ import pymysql
 #         print("爬虫结束")
 #         self.fp.close()
 
+
 # 管道文件中一个管道类对应将一组数据存储到一个平台或者载体中
 
-class mysqlPipeline():
+class mysqlPipeline(object):
     conn = None
     cursor = None
+    print("开始爬虫……")
 
     def open_spider(self, spider):
-        self.conn = pymysql.Connect(host="127.0.0.1", port=3306, user='root', password="acginor1992", db="sz",
-                                    charset="utf-8")
+        self.conn = pymysql.Connect(host="127.0.0.1", port=3306, user='root', db="sz",
+                                    charset="utf8")  # 原本有密码password="88888888"，因为vscode里设置密码就看不到数据，所以直接删了密码
 
     def process_item(self, item, spider):
         self.cursor = self.conn.cursor()
         try:
-            self.cursor.execute('insert into sz values ("%s","%s","%s","%s","%s")'
-                                % (item["title"], item["user"], item["time"], item["read"], item["reply"]))
+            # self.cursor.execute('insert into sz values ("%s")' % (
+            # item["title"]))  # 之前因为数据类型的问题无法运行,原因是charset="utf-8"是错的，应该是charset="utf8"
+            self.cursor.execute('insert into sz values ("%s","%s","%s","%s","%s")' %
+                                (item["title"], item["username"], item["reply"], item["readcount"],
+                                 item["posttime"]
+                                 ))  # 时间的格式为timestamp，且输入value的顺序要和mysql列的顺序一致
             self.conn.commit()
+            print('mysql数据传给管道')
 
         except Exception as e:
             print(e)
@@ -59,5 +68,6 @@ class mysqlPipeline():
         return item
 
     def close_spider(self, spider):
+        print("爬虫结束")
         self.cursor.close()
         self.conn.close()
