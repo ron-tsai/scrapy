@@ -28,7 +28,7 @@ class SzzsSpider(scrapy.Spider):
     start_urls = ['http://guba.eastmoney.com/list,zssh000001,f.html/']
 
     # 生成一个通用的url模板(不可变的)
-    url = 'http://guba.eastmoney.com/list,zssh000001,f_%d.html/'
+    url = 'http://guba.eastmoney.com/list,zssh000001_%d.html/'  ##而不是'http://guba.eastmoney.com/list,zssh000001,f_%d.html/'
     page_num = 2
 
     #
@@ -84,7 +84,7 @@ class SzzsSpider(scrapy.Spider):
             yield item  # 将item提交给管道
             # yield scrapy.Request(url=detail_url, callback=self.parse_detail,
             #                      meta={'item': item})
-        if self.page_num <= 2:
+        if self.page_num <= 85000:
             new_url = format(self.url % self.page_num)
 
             self.page_num += 1
