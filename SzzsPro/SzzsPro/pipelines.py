@@ -46,7 +46,7 @@ class mysqlPipeline(object):
     print("开始爬虫……")
 
     def open_spider(self, spider):
-        self.conn = pymysql.Connect(host="127.0.0.1", port=3306, user='root', db="szz",
+        self.conn = pymysql.Connect(host="127.0.0.1", port=3306, user='root', db="sz",
                                     charset="utf8")  # 原本有密码password="88888888"，因为vscode里设置密码就看不到数据，所以直接删了密码
 
     def process_item(self, item, spider):

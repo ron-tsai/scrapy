@@ -124,7 +124,7 @@ class SzzsproDownloaderMiddleware:
         # 通过request指定response
         bro = spider.bro  # 获取了在爬虫类中定义的浏览器对象
         bro.get(request.url)  # 对应的url请求发送
-        sleep(2)
+        sleep(0.5)
         page_text = bro.page_source  # 用selenium得到动态加载的源码数据
         new_response = HtmlResponse(url=request.url, body=page_text, encoding="utf-8", request=request)
 
